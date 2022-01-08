@@ -1,0 +1,19 @@
+{
+  "name": "nodejswebsite",
+  "version": "1.0.0",
+  "description": "Ground systems local host ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhay Khosla",
+  "license": "ISC",
+  "dependencies": {
+    "pug": "^3.0.2",
+    "pug-cli": "^1.0.0-alpha6",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
