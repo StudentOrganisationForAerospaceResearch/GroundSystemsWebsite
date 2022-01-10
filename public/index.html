@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/home.css">
+    <title>Ground Systems Websitey</title>
+</head>
+<body>
+    <h1> Welcome to the Homepage!</h1>
+    <h2> Current Time </h2>
+    <p id="curr_time"> 00:00:00 </p>
+    <script type="text/javascript">
+        setInterval(myTimer, 100)
+        function myTimer(){
+            fetch('/time', {
+                method: "GET",
+                headers: {
+						"Content-Type": "application/json",
+						'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("time is now: ", data)
+                var curr_time = document.getElementById("curr_time")
+                curr_time.innerHTML = data.time
+            })
+        }
+    </script>
+</body>
+</html>

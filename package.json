@@ -9,6 +9,9 @@
   "author": "Abhay Khosla",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.2",
+    "package-lock.json": "^1.0.0",
+    "package.json": "^2.0.1",
     "pug": "^3.0.2",
     "pug-cli": "^1.0.0-alpha6",
     "uuid": "^8.3.2"

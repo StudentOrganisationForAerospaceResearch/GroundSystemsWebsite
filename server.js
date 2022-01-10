@@ -6,22 +6,27 @@
 const { spawn } = require('child_process'); 
 const express = require('express')
 const app = express()
-app.engine('pug', require('pug').__express)
-app.set('view engine', 'pug');
+// app.engine('pug', require('pug').__express)
+// app.set('view engine', 'pug');
+app.use(express.static("public"))
 const PORT = process.env.PORT || 5000;
 
 app.get('/', (req, res) => {
-var dataToSend;
-const python = spawn('python', ['time.py']);
-python.stdout.on('data', (data) => {
-    dataToSend = data.toString();
+    res.sendFile(__dirname + '/public/index.html');
 });
-python.on('close', (code) => {
-    console.log(`The child process closed with code ${code}`);
-    // Send data to browser
-    res.render('main', { title: 'Ground Systems Website', message: dataToSend});
+
+app.get('/time', (req, res) => {
+    var dataToSend;
+    const python = spawn('python', ['time.py']);
+    python.stdout.on('data', (data) => {
+        dataToSend = data.toString();
     });
-});
+    python.on('close', (code) => {
+        console.log(`The child process closed with code ${code}`);
+        // Send data to browser
+        res.json({'time' : dataToSend});
+        });
+})
 
 // const http = require('http');
 // const path = require('path');
