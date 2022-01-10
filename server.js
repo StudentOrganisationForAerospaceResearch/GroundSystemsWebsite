@@ -1,13 +1,7 @@
-// const Person = require('./person');
-
-// const person1 = new Person('Abhay Khosla', 20);
-
-// person1.greeting();
 const { spawn } = require('child_process'); 
 const express = require('express')
 const app = express()
-// app.engine('pug', require('pug').__express)
-// app.set('view engine', 'pug');
+
 app.use(express.static("public"))
 const PORT = process.env.PORT || 5000;
 
