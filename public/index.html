@@ -42,3 +42,53 @@
     </script>
 </body>
 </html>
+
+
+---------Workday 10th Feb---------------
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/home.css">
+    <title>Ground Systems Websitey</title>
+</head>
+<body>
+    <h1> Welcome to the Homepage!</h1>
+    <h2> Current Time </h2>
+    <div class="flightData">
+        <h3>
+            Flight Data
+        </h3>
+        <div>
+            GPS
+            Temperature
+            Pressure
+        </div>
+    </div>
+    <p id="test_id"> Data </p>
+    <p id="test_id1"> Data </p>
+    <div class="buttons">
+        <button>Launch</button>
+        <button>Abort</button>
+    </div>
+    <script type="text/javascript">
+        setInterval(myTimer, 100)
+        function myTimer(){
+            fetch('/time', {
+                method: "GET",
+                headers: {
+						"Content-Type": "application/json",
+						'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("All of the data: ", data)
+                var test_id = document.getElementById("test_id")
+                var test_id1 = document.getElementById("test_id1")
+                test_id.innerHTML = data.test1
+                test_id1.innerHTML = data.test2
+            })
+        }
+    </script>
+</body>
+</html>
