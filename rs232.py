@@ -1,27 +1,3 @@
-# import serial
-
-# s = serial.Serial('COM3', 9600, timeout=10)
-
-# cs = 'qwerty'
-# i = 0
-# buf = b''
-
-# while True:
-#     rx = s.read()
-#     buf += rx
-
-#     # print(rx.hex())
-
-#     if (len(buf) > 3) and (buf[-3:] == b'END'):
-#         print(f"{i} [RX] {' '.join(buf[5:-3].hex()[i : i+2] for i in range(0, (len(buf)-8)*2, 2))}")
-#         buf = b''
-#     i = (i+1)%2
-
-#     # tx = cs[i]
-#     # i = (i+1) % len(cs)
-#     # rx = s.write(tx.encode('ASCII'))
-#     # print(f"[TX] '{tx}'")
-
 import serial
 import time
 import binascii
@@ -102,22 +78,7 @@ def readSerial(ser,data):
                 data.imu[7] = twos_complement(line[i+64:i+72], 32)
                 data.imu[8] = twos_complement(line[i+72:i+80], 32)
                 i+=81
-            else: i+=1
-            # print(data.imu[0])
-
-            # print(data.imu[1])
-
-            # print(data.imu[2])
-
-            # print(data.imu[3])
-
-            # print(data.imu[4])
-
-            # print(data.imu[5])
-            # print(data.imu[6])
-            # print(data.imu[7])
-            # print(data.imu[8])
-            
+            else: i+=1  
         # Barometer Data
         elif((line[i:i+8])=='32323232' and len(line)-i>=25):
             # print('Barometer detected')
