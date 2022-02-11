@@ -27,7 +27,11 @@ button {
 	transition-duration: 0.2s;
 }
 
-
+.center {
+	margin-left: auto;
+	margin-right: auto;
+  }
+  
 button:hover {
 	background-color: #0f3460;
 	color: white;

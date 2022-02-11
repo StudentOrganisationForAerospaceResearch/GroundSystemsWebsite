@@ -1,71 +1,85 @@
+<!-- ---------Workday 10th Feb--------------- -->
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="/home.css">
-    <title>Ground Systems Websitey</title>
-</head>
-<body>
-    <h1> Welcome to the Homepage!</h1>
-    <h2> Current Time </h2>
-    <div class="flightData">
-        <h3>
-            Flight Data
-        </h3>
-        <div>
-            GPS
-            Temperature
-            Pressure
-        </div>
-    </div>
-    <p id="curr_time"> 00:00:00 </p>
-    <div class="buttons">
-        <button>Launch</button>
-        <button>Abort</button>
-    </div>
-    <script type="text/javascript">
-        setInterval(myTimer, 100)
-        function myTimer(){
-            fetch('/time', {
-                method: "GET",
-                headers: {
-						"Content-Type": "application/json",
-						'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("time is now: ", data)
-                var curr_time = document.getElementById("curr_time")
-                curr_time.innerHTML = data.time
-            })
+    <title>Ground Systems Website</title>
+    <style>
+        table,
+        th,
+        td {
+          padding: 10px;
+          border: 1px solid rgb(190, 55, 61);
+          border-collapse: collapse;
         }
-    </script>
-</body>
-</html>
-
-
----------Workday 10th Feb---------------
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="/home.css">
-    <title>Ground Systems Websitey</title>
+      </style>
 </head>
 <body>
     <h1> Welcome to the Homepage!</h1>
-    <h2> Current Time </h2>
     <div class="flightData">
         <h3>
             Flight Data
         </h3>
-        <div>
-            GPS
-            Temperature
-            Pressure
-        </div>
     </div>
-    <p id="test_id"> Data </p>
-    <p id="test_id1"> Data </p>
+    <table class="center">
+        <tr>
+          <th>Data Type</th>
+          <th>Data Value</th>
+        </tr>
+        <tr>
+          <td>IMU</td>
+          <td id="test_id">IMU-ACCEL</td>
+        </tr>
+        <tr>
+            <td>IMU</td>
+            <td id="test_id1">IMU-GYRO</td>
+          </tr>
+         <tr>
+            <td>BAR</td>
+            <td id="test_id2">BAR-PRESS</td>
+          </tr>  
+          <tr>
+            <td>BAR</td>
+            <td id="test_id3">BAR-TEMP</td>
+          </tr>  
+          <tr>
+            <td>GPS</td>
+            <td id="test_id4">GPS-TIME</td>
+          </tr>  
+          <tr>
+            <td>GPS</td>
+            <td id="test_id5">GPS-LAT-DEGS</td>
+          </tr>  
+          <tr>
+            <td>GPS</td>
+            <td id="test_id6">GPS-LAT-MINS</td>
+          </tr>  
+          <tr>
+            <td>GPS</td>
+            <td id="test_id7">GPS-LONG-DEGS</td>
+          </tr>  
+          <tr>
+            <td>GPS</td>
+            <td id="test_id8">GPS-LONG-MINS</td>
+          </tr>  
+          <tr>
+            <td>GPS</td>
+            <td id="test_id9">GPS-ALT</td>
+          </tr>  
+          <tr>
+            <td>OXI</td>
+            <td id="test_id10">OXI-PRESS</td>
+          </tr>  
+          <tr>
+            <td>CMB</td>
+            <td id="test_id11">CMB-PRESS</td>
+          </tr>  
+          <tr>
+            <td>PHS</td>
+            <td id="test_id12">PHS-PHASE</td>
+          </tr>  
+      </table>
+      <button id="download-button">Download Flight Data</button>
     <div class="buttons">
         <button>Launch</button>
         <button>Abort</button>
@@ -82,13 +96,64 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("All of the data: ", data)
                 var test_id = document.getElementById("test_id")
                 var test_id1 = document.getElementById("test_id1")
+                var test_id2 = document.getElementById("test_id2")
+                var test_id3 = document.getElementById("test_id3")
+                var test_id4 = document.getElementById("test_id4")
+                var test_id5 = document.getElementById("test_id5")
+                var test_id6 = document.getElementById("test_id6")
+                var test_id7 = document.getElementById("test_id7")
+                var test_id8 = document.getElementById("test_id8")
+                var test_id9 = document.getElementById("test_id9")
+                var test_id10 = document.getElementById("test_id10")
+                var test_id11 = document.getElementById("test_id11")
+                var test_id12 = document.getElementById("test_id12")
                 test_id.innerHTML = data.test1
                 test_id1.innerHTML = data.test2
+                test_id2.innerHTML = data.test3
+                test_id3.innerHTML = data.test4
+                test_id4.innerHTML = data.test5
+                test_id5.innerHTML = data.test6
+                test_id6.innerHTML = data.test7
+                test_id7.innerHTML = data.test8
+                test_id8.innerHTML = data.test9
+                test_id9.innerHTML = data.test10
+                test_id10.innerHTML = data.test11
+                test_id11.innerHTML = data.test12
+                test_id12.innerHTML = data.test13
             })
         }
+        function htmlTableToCSVConversion(html_object_table, file_name) {
+            var flight_data = [];
+            var rows = document.querySelectorAll("table tr");
+                    
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], columns = rows[i].querySelectorAll("td, th");
+                for (var j = 0; j < columns.length; j++) {
+                        row.push(columns[j].innerText);
+                }
+                        
+                flight_data.push(row.join(",")); 		
+            }
+
+            csvFileDownload(flight_data.join("\n"), file_name);
+        }
+
+        function csvFileDownload(csv, filename) {
+            var csv_file, link_to_download;
+            csv_file = new Blob([csv], {type: "text/csv"});
+            link_to_download = document.createElement("a");
+            link_to_download.download = filename;
+            link_to_download.href = window.URL.createObjectURL(csv_file);
+            link_to_download.style.display = "none";
+            document.body.appendChild(link_to_download);
+            link_to_download.click();
+        }
+        document.getElementById("download-button").addEventListener("click", function () {
+            var html_object_table = document.querySelector("table").outerHTML;
+            htmlTableToCSVConversion(html_object_table, "flightData.csv");
+        });
     </script>
 </body>
 </html>
