@@ -39,7 +39,13 @@ class AvionicsData:
 
         with open('fligthData.csv', 'a') as csvfile:
             spamwriter = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
-            spamwriter.writerow([str(self.imu[0]), str(self.imu[1]), str(self.imu[2]), str(self.imu[3]), str(self.imu[4]), str(self.imu[5]), str(self.bar[0]), str(self.bar[1])])
+            spamwriter.writerow(
+                [
+                    str(self.imu[0]), str(self.imu[1]), str(self.imu[2]), str(self.imu[3]), str(self.imu[4]), str(self.imu[5]),
+                    str(self.bar[0]), str(self.bar[1]),
+                    str(self.gps[0]), str(self.gps[1]), str(self.gps[2]), str(self.gps[3]), str(self.gps[4]), str(self.gps[5])
+                ]
+            )
 
         return string
 
@@ -57,83 +63,77 @@ def disconnect(ser):
 def readSerial(ser,data):
     line = ser.read(256).hex()
     i = 0
-    # print(line)
+    if(line != ""):
+        print(line)
     while(i<len(line)):
         # IMU Data
         # print(line[i:i+8])
         # i=i+8
-        if((line[i:i+8]=='31313131')):
-            # print('IMU detected')
-            # print(line[i:i+82])
-            if(line[i+82:i+84]=='f0'):
-                # print('Inside second if')
-                # print(line[i:i+82])
-                data.imu[0] = twos_complement(line[i+8:i+16], 32)
-                data.imu[1] = twos_complement(line[i+16:i+24], 32)
-                data.imu[2] = twos_complement(line[i+24:i+32], 32)
-                data.imu[3] = twos_complement(line[i+32:i+40], 32)
-                data.imu[4] = twos_complement(line[i+40:i+48], 32)
-                data.imu[5] = twos_complement(line[i+48:i+56], 32)
-                data.imu[6] = twos_complement(line[i+56:i+64], 32)
-                data.imu[7] = twos_complement(line[i+64:i+72], 32)
-                data.imu[8] = twos_complement(line[i+72:i+80], 32)
-                i+=81
-            else: i+=1  
-        # Barometer Data
-        elif((line[i:i+8])=='32323232' and len(line)-i>=25):
-            # print('Barometer detected')
-            if(line[i+26:i+28]=='f0'):
-                # print('Inside second if')
-                # print(line[i:i+26])
-                data.bar[0] = twos_complement(line[i+8:i+16], 32)
-                data.bar[1] = twos_complement(line[i+16:i+24], 32)
-                i+=25
-            else:
-                 i+=1
+        # if((line[i:i+8]=='31313131') and len(line)-i>=81):
+        #     # print('IMU detected')
+        #     # print(line[i:i+82])
+        #     # print('Inside second if')
+        #     # print(line[i:i+82])
+        #     data.imu[0] = twos_complement(line[i+8:i+16], 32)
+        #     data.imu[1] = twos_complement(line[i+16:i+24], 32)
+        #     data.imu[2] = twos_complement(line[i+24:i+32], 32)
+        #     data.imu[3] = twos_complement(line[i+32:i+40], 32)
+        #     data.imu[4] = twos_complement(line[i+40:i+48], 32)
+        #     data.imu[5] = twos_complement(line[i+48:i+56], 32)
+        #     data.imu[6] = twos_complement(line[i+56:i+64], 32)
+        #     data.imu[7] = twos_complement(line[i+64:i+72], 32)
+        #     data.imu[8] = twos_complement(line[i+72:i+80], 32)
+        #     i+=81
+        # # Barometer Data
+        # elif((line[i:i+8])=='32323232' and len(line)-i>=25):
+        # # print('Barometer detected')
+        #     # print('Inside second if')
+        #     # print(line[i:i+26])
+        #     data.bar[0] = twos_complement(line[i+8:i+16], 32)
+        #     data.bar[1] = twos_complement(line[i+16:i+24], 32)
+        #     i+=25
 
         #GPS Data
-        elif((line[i:i+8]=='33333333') and (len(line)-i>=41)):
-            # print('GPS detected')
+        if((line[i:i+8]=='33333333') and (len(line)-i>=57)):
+            print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n")
+            print('GPS detected\n')
             # print(line[i:i+60])
-            if(line[i+58:i+60]=='f0'):
-                # print('Inside second if')
-                # print(line[i:i+42])
-                data.gps[0] = twos_complement(line[i+8:i+16], 32)
-                data.gps[1] = twos_complement(line[i+16:i+24], 32)
-                data.gps[2] = twos_complement(line[i+24:i+32], 32)
-                data.gps[3] = twos_complement(line[i+32:i+40], 32)  
-                data.gps[4] = twos_complement(line[i+40:i+48], 32)  
-                data.gps[5] = twos_complement(line[i+48:i+56], 32)  
-                i+=57
-            else:
-                 i+=1
+            # print('Inside second if')
+            print(line[i:i+57])
+            data.gps[0] = twos_complement(line[i+8:i+16], 32)
+            data.gps[1] = twos_complement(line[i+16:i+24], 32)
+            data.gps[2] = twos_complement(line[i+24:i+32], 32)
+            data.gps[3] = twos_complement(line[i+32:i+40], 32)  
+            data.gps[4] = twos_complement(line[i+40:i+48], 32)  
+            data.gps[5] = twos_complement(line[i+48:i+56], 32)  
+            i+=57
 
-        #Oxidizer Tank Pressure
-        elif((line[i:i+8]=='34343434') and (len(line)-i>=17)):
-            # print('Oxidizer detected')
-            if(line[i+16:i+18]=='f0'):
-                # print('Inside second if')
-                data.oxi = twos_complement(line[i+8:i+16], 32)
-                i+=17
-            else: i+=1
+        # #Oxidizer Tank Pressure
+        # elif((line[i:i+8]=='34343434') and (len(line)-i>=17)):
+        #     # print('Oxidizer detected')
+        #     if(line[i+16:i+18]=='f0'):
+        #         # print('Inside second if')
+        #         data.oxi = twos_complement(line[i+8:i+16], 32)
+        #         i+=17
+        #     else: i+=1
 
-        #Combustion Chamber Pressure
-        elif((line[i:i+8]=='35353535') and (len(line)-i>=17)):
-            # print('CC detected')
-            if(line[i+16:i+18]=='f0'):
-                # print('Inside second if')
-                data.cmb = twos_complement(line[i+8:i+16], 32)
-                i+=17
-            else: i+=1
+        # #Combustion Chamber Pressure
+        # elif((line[i:i+8]=='35353535') and (len(line)-i>=17)):
+        #     # print('CC detected')
+        #     if(line[i+16:i+18]=='f0'):
+        #         # print('Inside second if')
+        #         data.cmb = twos_complement(line[i+8:i+16], 32)
+        #         i+=17
+        #     else: i+=1
 
-        #Flight Phase
-        elif((line[i:i+8]=='36363636') and (len(line)-i>=13)):
-            # print('Flight Phase Detected')
-            if(line[i+10:i+12]=='f0'):
-                # print('Inside second if')
-                data.phs = int(line[i+8:i+10], 16)
-                i+=12
-            else: i+=1
+        # #Flight Phase
+        # elif((line[i:i+8]=='36363636') and (len(line)-i>=13)):
+        #     # print('Flight Phase Detected')
+        #     if(line[i+10:i+12]=='f0'):
+        #         # print('Inside second if')
+        #         data.phs = int(line[i+8:i+10], 16)
+        #         i+=12
+        #     else: i+=1
 
         # #Injection Valve Status
         # elif((line[i:i+8]=='38383838') and (len(line)-i>=13)):
@@ -150,8 +150,8 @@ def readSerial(ser,data):
         #     else: i+=1
 
         #No packet detected
-        else: i+=1
-        
+        else: 
+            i+=1
     # print(data)
 
 
@@ -161,9 +161,9 @@ if __name__ == "__main__":
     while(True):
 
         # port = input('Enter a Serial Port to connect to:') #Linux: /dev/ttyUSBx, Windows: COMx
-        ser = serial.Serial('COM3', 9600, timeout=0)
+        ser = serial.Serial('COM9', 57600, timeout=0)
 
         while(ser!=None):
             # time.sleep(1)
             readSerial(ser, data)
-            print(data.__str__())
+            # print(data.__str__())
